@@ -2,11 +2,14 @@ package com.sohu.tw.elevator.net.thrift;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.server.TThreadPoolServer.Options;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportException;
+import org.apache.thrift.transport.TTransportFactory;
 
 import com.sohu.tw.elevator.ElevatorConfig;
 
@@ -23,23 +26,22 @@ public class ThriftSerivce implements Runnable {
 	public ThriftSerivce() throws TTransportException {
 		handler = new LogHandler();
 		processor = new LogService.Processor(handler);
-		TServerTransport serverTransport = new TServerSocket(
-				ElevatorConfig.getElevatorPort());
-		server = new TThreadPoolServer(processor, serverTransport);
-		// server = new TThreadPoolServer(processor, serverTransport,
-		// new TFramedTransport.Factory(),
-		// new TFramedTransport.Factory(),
-		// new TBinaryProtocol.Factory(true, true),
-		// new TBinaryProtocol.Factory(true, true));
+		TServerTransport serverTransport = new TServerSocket(ElevatorConfig.getElevatorPort());
+
+		Options options = new Options();
+		options.maxWorkerThreads = 16535;
+		server = new TThreadPoolServer(processor, serverTransport, new TTransportFactory(), new TTransportFactory(),
+				new TBinaryProtocol.Factory(), new TBinaryProtocol.Factory(), options);
 
 	}
-	public LogHandler getLogHandler(){
+
+	public LogHandler getLogHandler() {
 		return handler;
 	}
+
 	@Override
 	public void run() {
-		logger.info("Thrift server start successfully! port="
-				+ ElevatorConfig.getElevatorPort());
+		logger.info("Thrift server start successfully! port=" + ElevatorConfig.getElevatorPort());
 		server.serve();
 	}
 

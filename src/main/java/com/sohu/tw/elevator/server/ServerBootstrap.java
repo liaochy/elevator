@@ -25,9 +25,9 @@ public class ServerBootstrap {
             jettyServer = new JettyServer();
 			jettyServer.start();
 
-			NettyServer server = new NettyServer();
-			server.start(thriftServ.getLogHandler());
-            SyslogNettyServer.start(thriftServ.getLogHandler());
+			//NettyServer server = new NettyServer();
+			//server.start(thriftServ.getLogHandler());
+            //SyslogNettyServer.start(thriftServ.getLogHandler());
 
 		} catch (Exception e) {
 			if (jettyServer != null)

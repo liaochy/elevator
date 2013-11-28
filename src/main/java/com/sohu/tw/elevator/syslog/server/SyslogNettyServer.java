@@ -1,5 +1,6 @@
 package com.sohu.tw.elevator.syslog.server;
 
+import com.sohu.tw.elevator.ElevatorConfig;
 import com.sohu.tw.elevator.net.thrift.LogHandler;
 import com.sohu.tw.elevator.syslog.TCPServerPipelineFactory;
 import com.sohu.tw.elevator.syslog.UDPServerPipelineFactory;
@@ -16,33 +17,31 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * User: yaqinzhang
- * Date: 12-12-14
+ * User: yaqinzhang Date: 12-12-14
  */
 public class SyslogNettyServer {
-    private final static Log logger = LogFactory.getLog(SyslogNettyServer.class);
+	private final static Log logger = LogFactory.getLog(SyslogNettyServer.class);
+	private static int udpPort = ElevatorConfig.getSyslogUDPPort();
+	private static int tcpPort = ElevatorConfig.getSyslogTCPPort();
+	private static String udpIp = ElevatorConfig.getSyslogUDPIP();
 
-    public static void start(LogHandler logHandler) {
-        OrderedMemoryAwareThreadPoolExecutor eventExecutor = new OrderedMemoryAwareThreadPoolExecutor(
-                16, 1000000, 10000000, 10 * 1000, TimeUnit.MILLISECONDS);
+	public static void start(LogHandler logHandler) {
+		OrderedMemoryAwareThreadPoolExecutor eventExecutor = new OrderedMemoryAwareThreadPoolExecutor(16, 1000000L,
+				10000000L, 10000L, TimeUnit.MILLISECONDS);
 
-        //UDP server
-        ConnectionlessBootstrap udpBootstrap = new ConnectionlessBootstrap(
-                new NioDatagramChannelFactory(Executors.newCachedThreadPool()));
+		ConnectionlessBootstrap udpBootstrap = new ConnectionlessBootstrap(new NioDatagramChannelFactory(
+				Executors.newCachedThreadPool()));
 
-        udpBootstrap.setPipelineFactory(new UDPServerPipelineFactory(eventExecutor, logHandler));
-        udpBootstrap.bind(new InetSocketAddress(514));
-        logger.info("SyslogNettyServer is starting udp server at port 514……");
+		udpBootstrap.setPipelineFactory(new UDPServerPipelineFactory(eventExecutor, logHandler));
+		udpBootstrap.bind(new InetSocketAddress(udpIp, udpPort));
+		logger.info("SyslogNettyServer is starting udp server at port " + udpPort);
 
-        //TCP server
-        ServerBootstrap tcpBootstrap = new ServerBootstrap(
-                new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
+		ServerBootstrap tcpBootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
+				Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
-        tcpBootstrap.setPipelineFactory(new TCPServerPipelineFactory(eventExecutor,
-                logHandler));
-        tcpBootstrap.bind(new InetSocketAddress(515));
-        logger.info("SyslogNettyServer is starting tcp server at port 515……");
-    }
+		tcpBootstrap.setPipelineFactory(new TCPServerPipelineFactory(eventExecutor, logHandler));
+
+		tcpBootstrap.bind(new InetSocketAddress(tcpPort));
+		logger.info("SyslogNettyServer is starting tcp server at port " + tcpPort);
+	}
 }
