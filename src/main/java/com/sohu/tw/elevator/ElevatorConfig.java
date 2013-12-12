@@ -57,6 +57,11 @@ public class ElevatorConfig {
 		String time = p.getProperty("topic.filter");
 		return time == null ? false : Boolean.parseBoolean(time);
 	}
+	
+	public static boolean getAvroHttp() {
+		String time = p.getProperty("avro.ishttp");
+		return time == null ? true : Boolean.parseBoolean(time);
+	}
 
 	public static int getLogBatchSize() {
 		String logBatchSize = p.getProperty("log.batch.size");
@@ -90,6 +95,11 @@ public class ElevatorConfig {
 	public static int getSyslogUDPPort() {
 		String port = p.getProperty("syslog.udp.port");
 		return port == null ? 10514 : Integer.parseInt(port);
+	}
+	
+	public static int getAvroPort(){
+		String port = p.getProperty("avro.port");
+		return port == null ? 8089 : Integer.parseInt(port);
 	}
 
 	public static int getSyslogTCPPort() {

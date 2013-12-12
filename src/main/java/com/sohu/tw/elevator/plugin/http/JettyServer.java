@@ -44,7 +44,7 @@ public class JettyServer {
 	}
 
 	protected String getWebAppsPath() throws IOException {
-		URL url = getClass().getClassLoader().getResource("elevator-webapps");
+		URL url = Thread.currentThread().getContextClassLoader().getResource("elevator-webapps");
 		if (url == null)
 			throw new IOException("webapps not found in CLASSPATH");
 		return url.toString();

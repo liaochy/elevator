@@ -6,8 +6,8 @@ bin=`dirname "$0"`
 ELEVATOR_HOME=`cd "$bin/.."; pwd -P`
 ELEVATOR_CONF_DIR=$ELEVATOR_HOME/config
 
-mkdir -p $ELEVATOR_HOME/logs
-ELEVATOR_LOGS=/opt/DATA/goldmine/elevator/logs
+ELEVATOR_LOGS=/opt/data/goldmine/elevator/logs
+mkdir -p $ELEVATOR_LOGS
 
 # add all lib and config in classpath 
 ELE_LIB=$ELEVATOR_HOME/lib

@@ -20,9 +20,9 @@ public class LogHandler implements LogService.Iface {
 		this.service = kafkaServ;
 	}
 
-    public KafkaProducerService getService(){
-        return this.service;
-    }
+	public KafkaProducerService getService() {
+		return this.service;
+	}
 
 	@Override
 	public void send(List<LogEntity> logList) {

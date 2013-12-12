@@ -77,7 +77,7 @@ public class HttpHandler extends SimpleChannelUpstreamHandler {
 
     private void doPut4Chunk(ChannelHandlerContext ctxt, HttpChunk req,
                              HttpResponse resp) {
-        Map<String, String> pMap = ((Attachment) ctxt.getChannel()
+        Map<String, String> pMap = ((Attachment)ctxt.getChannel()
                 .getAttachment()).pMap;
         String topic = pMap.get("topic");
         ChannelBuffer buffer = req.getContent();
