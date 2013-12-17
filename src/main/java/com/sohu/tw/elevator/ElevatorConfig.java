@@ -63,6 +63,12 @@ public class ElevatorConfig {
 		return time == null ? true : Boolean.parseBoolean(time);
 	}
 
+	public static boolean useSyslog() {
+		String time = p.getProperty("syslog.open");
+		return time == null ? false : Boolean.parseBoolean(time);
+	}
+
+	
 	public static int getLogBatchSize() {
 		String logBatchSize = p.getProperty("log.batch.size");
 		return logBatchSize == null ? 100 : Integer.parseInt(logBatchSize);

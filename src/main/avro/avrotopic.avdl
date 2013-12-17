@@ -1,0 +1,15 @@
+@namespace("com.sohu.goldmine.avro")
+
+protocol AvroTopicEventServer{
+
+record AvroTopicEvent {
+  long timestamp;
+  string body;
+  string host;
+  string topic;
+  string path;
+  boolean json;
+}
+
+void append( array<AvroTopicEvent> evts ) oneway ;
+}

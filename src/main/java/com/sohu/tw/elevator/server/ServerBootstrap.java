@@ -14,6 +14,8 @@ import com.sohu.tw.elevator.net.thrift.LogHandler;
 import com.sohu.tw.elevator.net.thrift.ThriftSerivce;
 import com.sohu.tw.elevator.plugin.http.AvroTopicEventServerImpl;
 import com.sohu.tw.elevator.plugin.http.JettyServer;
+import com.sohu.tw.elevator.plugin.http.NettyServer;
+import com.sohu.tw.elevator.syslog.server.SyslogNettyServer;
 import com.sohu.tw.goldmine.watchdog.metrics2.lib.DefaultMetricsSystem;
 
 /**
@@ -25,7 +27,8 @@ public class ServerBootstrap {
 	public static List<LogEntity> convertToLogEntity(List<AvroTopicEvent> evts) {
 		List<LogEntity> list = new ArrayList<LogEntity>(evts.size());
 		for (AvroTopicEvent evt : evts) {
-			list.add(new LogEntity(evt.getTopic().toString(), evt.toString()));
+			list.add(new LogEntity(evt.getTopic().toString(),
+					evt.getJson() ? evt.toString() :  evt.getBody().toString()));
 		}
 		return list;
 	}
@@ -41,9 +44,11 @@ public class ServerBootstrap {
 			jettyServer = new JettyServer();
 			jettyServer.start();
 
-			// NettyServer server = new NettyServer();
-			// server.start(thriftServ.getLogHandler());
-			// SyslogNettyServer.start(thriftServ.getLogHandler());
+			if (ElevatorConfig.useSyslog()) {
+				NettyServer server = new NettyServer();
+				server.start(thriftServ.getLogHandler());
+				SyslogNettyServer.start(thriftServ.getLogHandler());
+			}
 
 			AvroTopicEventServerImpl avroServer = new AvroTopicEventServerImpl(
 					ElevatorConfig.getAvroPort(), ElevatorConfig.getAvroHttp()) {

@@ -22,7 +22,7 @@
     </appender>
 
     <appender name="info" class="org.apache.log4j.DailyRollingFileAppender">
-       <param name="file" value="/opt/DATA/goldmine/elevator/logs/elevator.log" />
+       <param name="file" value="/opt/data/goldmine/elevator/logs/elevator.log" />
        <param name="append" value="true" />
        <layout class="org.apache.log4j.PatternLayout">
            <param name="ConversionPattern" value="%d{ISO8601} %p %c: %m%n" />
@@ -36,7 +36,7 @@
     </appender>
 
     <appender name="error" class="org.apache.log4j.DailyRollingFileAppender">
-       <param name="file" value="/opt/DATA/goldmine/elevator/logs/elevator_err.log" />
+       <param name="file" value="/opt/data/goldmine/elevator/logs/elevator_err.log" />
        <param name="append" value="true" />
        <layout class="org.apache.log4j.PatternLayout">
            <param name="ConversionPattern" value="%d{ISO8601} %p %c: %m%n" />
