@@ -4,11 +4,11 @@ protocol AvroTopicEventServer{
 
 record AvroTopicEvent {
   long timestamp;
-  string body;
-  string host;
-  string topic;
-  string path;
-  boolean json;
+  union {null ,string} body;
+  union {null ,string} host;
+  union {null ,string} topic;
+  union {null ,string} path;
+  boolean json = false;
 }
 
 void append( array<AvroTopicEvent> evts ) oneway ;

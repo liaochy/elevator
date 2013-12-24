@@ -27,8 +27,8 @@ public class ServerBootstrap {
 	public static List<LogEntity> convertToLogEntity(List<AvroTopicEvent> evts) {
 		List<LogEntity> list = new ArrayList<LogEntity>(evts.size());
 		for (AvroTopicEvent evt : evts) {
-			list.add(new LogEntity(evt.getTopic().toString(),
-					evt.getJson() ? evt.toString() :  evt.getBody().toString()));
+			list.add(new LogEntity(evt.topic.toString(),
+					evt.json ? evt.toString() :  evt.body.toString()));
 		}
 		return list;
 	}
