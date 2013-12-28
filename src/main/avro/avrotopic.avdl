@@ -11,5 +11,15 @@ record AvroTopicEvent {
   boolean json = false;
 }
 
+record AvroTopicEventV2 {
+  long timestamp;
+  union {null ,string} body;
+  union {null ,string} host;
+  union {null ,string} topic;
+  union {null ,string} path;
+}
+
 void append( array<AvroTopicEvent> evts ) oneway ;
+
+void appendV2( array<AvroTopicEventV2> evts ,boolean json ) oneway ;
 }

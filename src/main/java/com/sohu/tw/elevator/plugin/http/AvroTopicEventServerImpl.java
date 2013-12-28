@@ -12,6 +12,7 @@ import org.apache.avro.ipc.specific.SpecificResponder;
 
 import com.sohu.goldmine.avro.AvroTopicEvent;
 import com.sohu.goldmine.avro.AvroTopicEventServer;
+import com.sohu.goldmine.avro.AvroTopicEventV2;
 
 public class AvroTopicEventServerImpl implements AvroTopicEventServer {
 	private Server server;
@@ -43,7 +44,13 @@ public class AvroTopicEventServerImpl implements AvroTopicEventServer {
 		server.close();
 	}
 
+	@Override
 	public void append(List<AvroTopicEvent> evt) {
 
+	}
+
+	@Override
+	public void appendV2(List<AvroTopicEventV2> evts, boolean json) {
+		
 	}
 }

@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.sohu.goldmine.avro.AvroTopicEvent;
+import com.sohu.goldmine.avro.AvroTopicEventV2;
 import com.sohu.tw.elevator.ElevatorConfig;
 import com.sohu.tw.elevator.metrics.StatusSink;
 import com.sohu.tw.elevator.net.thrift.LogEntity;
@@ -27,8 +28,18 @@ public class ServerBootstrap {
 	public static List<LogEntity> convertToLogEntity(List<AvroTopicEvent> evts) {
 		List<LogEntity> list = new ArrayList<LogEntity>(evts.size());
 		for (AvroTopicEvent evt : evts) {
-			list.add(new LogEntity(evt.topic.toString(),
-					evt.json ? evt.toString() :  evt.body.toString()));
+			list.add(new LogEntity(evt.topic.toString(), evt.json ? evt
+					.toString() : evt.body.toString()));
+		}
+		return list;
+	}
+
+	public static List<LogEntity> convertV2ToLogEntity(
+			List<AvroTopicEventV2> evts, boolean json) {
+		List<LogEntity> list = new ArrayList<LogEntity>(evts.size());
+		for (AvroTopicEventV2 evt : evts) {
+			list.add(new LogEntity(evt.topic.toString(), json ? evt.toString()
+					: evt.body.toString()));
 		}
 		return list;
 	}
@@ -59,9 +70,21 @@ public class ServerBootstrap {
 					try {
 						loghandler.send(convertToLogEntity(evts));
 					} catch (Exception e1) {
-						logger.error("AvroTopicEventServerImpl Error", e1);
+						logger.error("AvroTopicEventServerImpl append Error", e1);
 					}
 					super.append(evts);
+				}
+
+				@Override
+				public void appendV2(List<AvroTopicEventV2> evts, boolean json) {
+
+					try {
+						loghandler.send(convertV2ToLogEntity(evts, json));
+					} catch (Exception e1) {
+						logger.error("AvroTopicEventServerImpl appendV2 Error", e1);
+					}
+					super.appendV2(evts, json);
+
 				}
 			};
 			avroServer.start();
